@@ -15,8 +15,23 @@ function calculateSimpleRevenue(purchase, _product) {
  * @param seller карточка продавца
  * @returns {number}
  */
+
+    // Расчет бонуса от позиции в рейтинге
+
 function calculateBonusByProfit(index, total, seller) {
-    // @TODO: Расчет бонуса от позиции в рейтинге
+
+
+const profit = Math.max(0, number(seller, profit ?? 0));
+
+    if (inderx === 0) {
+        return profit * 0.15;
+    } else if ( index === 1 || index === 2) {
+        return profit * 0.10;
+    } else if ( index === total -1) {
+        return 0
+    } else {
+        return profit * 0.05;
+    }
 }
 
 /**
@@ -26,7 +41,15 @@ function calculateBonusByProfit(index, total, seller) {
  * @returns {{revenue, top_products, bonus, name, sales_count, profit, seller_id}[]}
  */
 function analyzeSalesData(data, options) {
-    // @TODO: Проверка входных данных
+
+    // Проверка входных данных
+
+    if (!data
+        || ((!Array.isArray(data.sellers)) || !Array.isArray(data.products) || !Array.isArray(data.purchase_records))
+        || ((data.sellers.length === 0) || (data.products.length === 0) || (data.purchase_records.length === 0)) 
+    ) {
+        throw new Error('Некорректные входные данные')
+    }
 
     // @TODO: Проверка наличия опций
 
