@@ -6,6 +6,11 @@
  */
 function calculateSimpleRevenue(purchase, _product) {
    //  Расчет выручки от операции
+
+   const {discount = 0, sale_price = 0, quantity = 0} = purchase;
+   const discountFactor = 1 - (discount / 100);
+
+   return sale_price * quantity * discountFactor;
 }
 
 /**
@@ -134,13 +139,25 @@ function analyzeSalesData(data, options) {
 
     seller.bonus = calculateBonus(index, sellerStats.length, seller);
 
+    //  Назначение премий на основе ранжирования
+
     seller.top_products = Object 
                         .entries(seller.products_sold)
                         .map(([sku, quantity]) => ({sku, quantity}))
                         .sort(((a, b) => b.quantity - a.quantity))
                         .slice(0, 10);
 
-    //  Назначение премий на основе ранжирования
-
     //  Подготовка итоговой коллекции с нужными полями
+
+    const to2 = n=> + Number(n ?? 0).toFixed(2);
+
+    return sellerStats.map(seller => ({
+        seller_id: String(seller.id),
+        name: seller.name,
+        revenue: to2(seller.revenue),
+        profit: to2(seller.profit),
+        selles_count: seller.seles_count,
+        top_products: seller.top_products,
+        bonus: to2(seller.bonus)
+    }));
 
